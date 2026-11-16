@@ -14,6 +14,16 @@ the new, randomly initialised layers add nothing and the frozen GPT-2 works exac
 open during training. This is the "tanh gating" of Flamingo
 ([Alayrac et al., NeurIPS 2022](https://arxiv.org/abs/2204.14198)), without its extra gated feed-forward layer.
 
+Inside each gated layer, `W_q`, `W_k` and `W_v` find what to read; `W_o` maps what was read back into
+GPT-2's word space before the gate adds it:
+
+```
+word ──► query ──► compares with tile keys ──► weights ──► context vector (read)
+                                                              │
+                                                              ▼  × W_o
+                                                 word + tanh(g) · (read · W_oᵀ)
+```
+
 ## Results
 
 42 slides from patients never seen in training (5 TCGA subtypes: lung adenocarcinoma, lung squamous,
