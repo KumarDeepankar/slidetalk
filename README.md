@@ -8,6 +8,12 @@ prototype of the idea behind slide-language models such as Prov-GigaPath and Fla
 
 ![SlideTalk architecture](docs/slidetalk.png)
 
+**Why "gated".** Each cross-attention layer adds what it read from the slide back to the words as
+`words + tanh(g) · W_o(read)`, where `g` is one learned number per layer that starts at 0. So at the start
+the new, randomly initialised layers add nothing and the frozen GPT-2 works exactly as released; the gates
+open during training. This is the "tanh gating" of Flamingo
+([Alayrac et al., NeurIPS 2022](https://arxiv.org/abs/2204.14198)), without its extra gated feed-forward layer.
+
 ## Results
 
 42 slides from patients never seen in training (5 TCGA subtypes: lung adenocarcinoma, lung squamous,
